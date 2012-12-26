@@ -4,11 +4,11 @@
 // END;
 
 BEGINGROUPS(6)// Glöm inte att ändra denna siffra så den stämmer övens med antalet grupper
-GROUP( 0, 100, 0 )
-GROUP( 1, 0, 100 )
-GROUP( 2, 100, 0 )
-GROUP( 3, 0, 100 )
-GROUP( 4, 100, 0 )
+GROUP( 0, 0, 0 )
+GROUP( 1, 3, 50 )
+GROUP( 2, 3, 50 )
+GROUP( 3, 3, 75 )
+GROUP( 4, 3, 75 )
 GROUP( 5, 0, 100 ) // sista är slutspel
 ENDGROUPS()
 
@@ -54,10 +54,10 @@ ZONE( 4, "TAG07", "3-55", "       Leta i       ", "       rummet       ")
 ZONE( 4, "TAG42", "3-65", "       Leta i       ", "       rummet       ")
 
 
-ZONE( 5, "END89", "????", "Plan 0", "Under trappan")
-ZONE( 5, "END88", "????", "N trapphuset, mellan", "Plan 1 och Plan 2")
-ZONE( 5, "END84", "????", "Vid hissen, plan 2", "Lycka till....")
-ZONE( 5, "END87", "????", "Rum 62", "Trappdorren ")
+ZONE( 5, "END09", "????", "Plan 0", "Under trappan")
+ZONE( 5, "END08", "????", "N trapphuset, mellan", "Plan 1 och Plan 2")
+ZONE( 5, "END04", "????", "Vid hissen, plan 2", "Lycka till....")
+ZONE( 5, "END07", "????", "Rum 62", "Trappdorren ")
 
 ENDZONES()
 
