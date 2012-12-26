@@ -20,3 +20,6 @@ const int LCD_PIN5 = 2;
 const int LCD_BACKLIGHT = 9;
 
 const int BUTTON1 = 2;
+
+
+//Hejsan
