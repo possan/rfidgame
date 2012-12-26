@@ -28,18 +28,17 @@ typedef struct {
   unsigned char hahachance;
   unsigned char holdchance;
 } Group;
-const int GROUP_SIZE     = 4;
+const int GROUP_SIZE     = 3;
 
 typedef struct {
   unsigned char level; // +1 = 1
   char alias[6];       // +6 = 7
-  char display[3];     // +3 = 10
+  char display[6];     // +3 = 10
   char location[5];    // +5 = 15
   char hintline1[21];  // +21 = 36
   char hintline2[21];  // +21 = 47
 } Zone;
-const int ZONE_SIZE     = 1+6+3+5+21+21;
-
+const int ZONE_SIZE     = 1+6+6+5+21+21;
 
 typedef struct {
   char rfidcode[13];   // 0 +13 = 13
@@ -47,30 +46,19 @@ typedef struct {
 } Tag;
 const int TAG_SIZE       = 19;
 
-// Group groups[5];
-
-// const int number_of_levels = 5;
-// const Group groups[] = {
-//  { 0, 0, 0, 0 },
-//  { 0, 0, 0, 0 },
-// };
-
 #define BEGINGROUPS(NNN)\
   const int number_of_levels = NNN;\
   PROGMEM const Group groups[] = {
 
 #define GROUP(_index, _hahachance, _holdchance)\
   {_index, _hahachance, _holdchance},
-  // __zoneindex = 0;\
-  // groups[__groupindex].hahachance = _hahachance;\
-  // groups[__groupindex].holdchance = _holdchance;
 
 #define BEGINZONES(NNN)\
   const int number_of_zones = NNN;\
   PROGMEM const Zone zones[] = {
 
 #define ZONE(_group, _tag, _location, _hintline1, _hintline2)\
-  {_group, "TAG"_tag, _tag, _location, _hintline1, _hintline2},
+  {_group, _tag, _tag, _location, _hintline1, _hintline2},
 
 #define ENDGROUPS()\
   };
@@ -524,8 +512,29 @@ void game_begin_current_level() {
   // _pgm_get_zone(current_point_index, &current_point);
 
 
-  int r1 = rand() % 100;
+  int r1 = rand() % 100;  
+ 
+  lcd.clear();
+  lcd.setCursor(0,0);
+  lcd.print("Lvl: ");
+  lcd.setCursor(13,0);
+  lcd.print(current_level_index);
+  lcd.setCursor(0,1);
+  lcd.print("Hahachans:");
+  lcd.setCursor(13,1);
+  lcd.print(current_level.hahachance);
+  lcd.setCursor(5,2);
+  lcd.print(current_level.holdchance);
+  lcd.setCursor(10,2);
+  lcd.print(current_level.index);
+  lcd.setCursor(0,2);
+  lcd.print("Slump:");
+  lcd.setCursor(13,2);
+  lcd.print(r1, DEC);
+  delay(5000);
+    
   if (r1 < current_level.hahachance) {
+    //  < 100
     // välja två andra platser
   	// hitta en
     while(true) {
@@ -551,42 +560,9 @@ void game_begin_current_level() {
 
     distraction_offset = rand() % 99;
 
- 
-    lcd.clear();
-    lcd.setCursor(0,0);
-    lcd.print("Lvl: ");
-    lcd.setCursor(13,0);
-    lcd.print(current_level_index);
-    lcd.setCursor(0,1);
-    lcd.print("Hahachans:");
-    lcd.setCursor(13,1);
-    lcd.print(current_level.hahachance);
-    lcd.setCursor(0,2);
-    lcd.print("Slump:");
-    lcd.setCursor(13,2);
-    lcd.print(r1);
-    delay(5000);
-
-
     find3_begin();
   }
-  else {
-    lcd.clear();
-    lcd.setCursor(0,0);
-    lcd.print("Lvl: ");
-    lcd.setCursor(13,0);
-    lcd.print(current_level_index);
-    lcd.setCursor(0,1);
-    lcd.print("Hahachans:");
-    lcd.setCursor(13,1);
-    lcd.print(current_level.hahachance);
-    lcd.setCursor(0,2);
-    lcd.print("Slump:");
-    lcd.setCursor(13,2);
-    lcd.print(r1);
-    delay(5000);
-
-    
+  else {    
     find1_begin();
   }
 }
@@ -622,11 +598,11 @@ void find1_draw() {
   // ====================
   //
   //               ____ ____ ____ _____
-  lcd_print(0, 0, "      FIND __       ");
+  lcd_print(0, 0, "    FIND _____       ");
   lcd_print(0, 1, "      AT ____       ");
   // lcd_print(0, 2, "????????????????????");
   // lcd_print(0, 3, "????????????????????");
-  lcd_print(11, 0, current_point.display );
+  lcd_print(9, 0, current_point.display );
   lcd_print(9, 1, current_point.location );
   lcd_print(0, 2, current_point.hintline1 );
   lcd_print(0, 3, current_point.hintline2 );
@@ -646,12 +622,12 @@ void find3_draw() {
   // ====================
   //
   //               ____ ____ ____ _____
-  lcd_print(0, 0, "     FIND __ AT     ");
+  lcd_print(0, 0, "    FIND _____ AT     ");
   lcd_print(0, 1, "____ OR ____ OR ____");
   // lcd_print(0, 2, "????????????????????");
   // lcd_print(0, 3, "????????????????????");
 
-  lcd_print(10, 0, current_point.display );
+  lcd_print(9, 0, current_point.display );
   lcd_print(0, 2, current_point.hintline1 );
   lcd_print(0, 3, current_point.hintline2 );
 
@@ -729,20 +705,21 @@ void game_has_found_point() {
 
   // kolla om vi ska hålla eller bara tagga
   int r2 = rand() % 100;
-    lcd.clear();
-    lcd.setCursor(0,0);
-    lcd.print("Lvl: ");
-    lcd.setCursor(13,0);
-    lcd.print(current_level_index);
-    lcd.setCursor(0,1);
-    lcd.print("Hahachans:");
-    lcd.setCursor(13,1);
-    lcd.print(current_level.holdchance);
-    lcd.setCursor(0,2);
-    lcd.print("Slump:");
-    lcd.setCursor(13,2);
-    lcd.print(r2);
-    delay(5000);
+
+  lcd.clear();
+  lcd.setCursor(0,0);
+  lcd.print("Lvl: ");
+  lcd.setCursor(13,0);
+  lcd.print(current_level_index);
+  lcd.setCursor(0,1);
+  lcd.print("Holdchans:");
+  lcd.setCursor(13,1);
+  lcd.print(current_level.holdchance);
+  lcd.setCursor(0,2);
+  lcd.print("Slump:");
+  lcd.setCursor(13,2);
+  lcd.print(r2);
+  delay(5000);
 
   if (r2 < current_level.holdchance) {
   	// vi ska hålla punkten
