@@ -21,5 +21,3 @@ const int LCD_BACKLIGHT = 9;
 
 const int BUTTON1 = 2;
 
-
-//Hejsan
