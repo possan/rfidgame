@@ -81,7 +81,6 @@ extern const Tag tags[];
 
 #define DEFINETAG(_rfid, _alias) { _rfid, _alias },
 
-
 void _pgm_get_tag(int index, void *output) {
     memcpy_P(output, ((char *)&tags)+(TAG_SIZE*index), TAG_SIZE);
 }
@@ -93,8 +92,6 @@ void _pgm_get_group(int index, void *output) {
 void _pgm_get_zone(int index, void *output) {
     memcpy_P(output, ((char *)&zones)+(ZONE_SIZE*index), ZONE_SIZE);
 }
-
-
 
 long display_deadline = 0;
 
@@ -115,10 +112,6 @@ void backlight_check() {
   digitalWrite(LCD_BACKLIGHT, (seconds() <= display_deadline));
 }
 
-
-
-
-
 int current_level_index;
 Group current_level;
 Zone current_point;
@@ -136,50 +129,10 @@ void setup() {
 
   Serial.begin(9600);
 
- // randomSeed(0);
- // srand(0);
- //  initzones();
-
   tag_clear();
   backlight_force();
 
   box_reset();
-  // game_reset();
-
-  // testkod
-  /*
-  Zone tmpzone;
-  for (int i=0; i<number_of_zones; i++) {
-    _pgm_get_zone(i, &tmpzone);
-    Serial.write("zone #");
-    Serial.print(i);
-    Serial.write(" - level ");
-    Serial.print(tmpzone.level);
-    Serial.write(": ");
-    Serial.write(tmpzone.location);
-    Serial.write("\n");
-  }
-  Serial.write("test start:\n");
-  for (int l=0; l<number_of_levels; l++) {
-    Serial.write("level #");
-    Serial.print(l);
-    Serial.write("\n");
-    for (int r=0; r<20; r++) {
-      Serial.write("randomization test #");
-      Serial.print(r);
-      Serial.write(": ");
-      Zone tmp;
-      find_random_zone_in_current_level(l, &tmp);
-      Serial.write(" tag=");
-      Serial.write(tmp.alias);
-      Serial.write(" location=");
-      Serial.write(tmp.location);
-      Serial.write("\n");
-    }
-    Serial.write("\n");
-  }
-  Serial.write("\n");
-  */
 }
 
 long seconds() {
@@ -195,7 +148,6 @@ int _bufpos = 0;
 void tag_clear() {
   _bufpos = 0;
 }
-
 
 void tag_find_alias_by_tag(char *tag, char *alias) {
   strcpy(_alias, "?????");
@@ -231,11 +183,6 @@ bool tag_available() {
   return false;
 }
 
-
-
-
-
-
 enum LOOPS {
   LOOP_NONE = 0,
   LOOP_WELCOME,
@@ -248,9 +195,6 @@ enum LOOPS {
 };
 
 LOOPS currentloop = LOOP_NONE;
-
-
-
 
 void loop() {
   while(true) {
@@ -281,13 +225,6 @@ void loop() {
   }
 }
 
-
-
-
-
-
-
-
 void lcd_clear() {
   lcd.clear();
   lcd.setCursor(0, 0);
@@ -312,12 +249,6 @@ void display_banner(char *line0, char *line1, char *line2, char *line3) {
 	delay(BANNER_MESSAGE_TIME * 1000);
 	lcd_clear();
 }
-
-
-
-
-
-
 
 void box_reset() {
   welcome_begin();
@@ -355,13 +286,6 @@ void welcome_scan(char *tag, char *alias) {
   	debug_begin();
   }
 }
-
-
-
-
-
-
-
 
 void game_reset() {
  	// currentloop = LOOP_NONE;
@@ -420,22 +344,6 @@ void debug_scan(char *tag, char *alias) {
   debug_draw();
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 void game_begin_next_level() {
   // börja nästa level (eller första leveln)
   if (current_level_index >= number_of_levels-1) {
@@ -447,7 +355,6 @@ void game_begin_next_level() {
   find_random_zone_in_current_level(current_level_index, &current_point);
   game_begin_current_level();
 }
-
 
 void find_random_zone_in_current_level(int level, void *output) {
   // find n point in a level
@@ -478,7 +385,6 @@ void find_random_zone_in_current_level(int level, void *output) {
     }
   }
 }
-
 
 void game_begin_current_level() {
   // Skriv ut "välkommen till bana X" eller "sista banan"
@@ -567,12 +473,6 @@ void game_begin_current_level() {
   }
 }
 
-
-
-
-
-
-
 void find1_begin() {
   currentloop = LOOP_FIND1;
   find1_draw();
@@ -598,11 +498,11 @@ void find1_draw() {
   // ====================
   //
   //               ____ ____ ____ _____
-  lcd_print(0, 0, "    FIND _____       ");
+  lcd_print(0, 0, "     FIND _____     ");
   lcd_print(0, 1, "      AT ____       ");
   // lcd_print(0, 2, "????????????????????");
   // lcd_print(0, 3, "????????????????????");
-  lcd_print(9, 0, current_point.display );
+  lcd_print(10, 0, current_point.display );
   lcd_print(9, 1, current_point.location );
   lcd_print(0, 2, current_point.hintline1 );
   lcd_print(0, 3, current_point.hintline2 );
@@ -622,12 +522,12 @@ void find3_draw() {
   // ====================
   //
   //               ____ ____ ____ _____
-  lcd_print(0, 0, "    FIND _____ AT     ");
+  lcd_print(0, 0, "   FIND _____ AT     ");
   lcd_print(0, 1, "____ OR ____ OR ____");
   // lcd_print(0, 2, "????????????????????");
   // lcd_print(0, 3, "????????????????????");
 
-  lcd_print(9, 0, current_point.display );
+  lcd_print(8, 0, current_point.display );
   lcd_print(0, 2, current_point.hintline1 );
   lcd_print(0, 3, current_point.hintline2 );
 
@@ -680,21 +580,15 @@ void findX_scan(char *tag, char *alias, int tre) {
 void find1_scan(char *tag, char *alias) { findX_scan(tag, alias, 0); }
 void find3_scan(char *tag, char *alias) { findX_scan(tag, alias, 1); }
 
-
-
-
-
 void game_found_wrong_point() {
   display_banner(
     //1234012340123401234
-  	"",
-  	"    WRONG POINT    ",
-  	"",
-  	""
+    "",
+    "    WRONG POINT    ",
+    "",
+    ""
   );
 }
-
-
 
 void game_has_found_point() {
 
@@ -705,22 +599,6 @@ void game_has_found_point() {
 
   // kolla om vi ska hålla eller bara tagga
   int r2 = rand() % 100;
-
-  lcd.clear();
-  lcd.setCursor(0,0);
-  lcd.print("Lvl: ");
-  lcd.setCursor(13,0);
-  lcd.print(current_level_index);
-  lcd.setCursor(0,1);
-  lcd.print("Holdchans:");
-  lcd.setCursor(13,1);
-  lcd.print(current_level.holdchance);
-  lcd.setCursor(0,2);
-  lcd.print("Slump:");
-  lcd.setCursor(13,2);
-  lcd.print(r2);
-  delay(5000);
-
   if (r2 < current_level.holdchance) {
   	// vi ska hålla punkten
     hold_begin(HOLD_STANDARD_REPETITIONS);
@@ -728,36 +606,16 @@ void game_has_found_point() {
   }
 
   display_banner(
-		//1234012340123401234
+    //1234012340123401234
     "",
-		"   CORRECT POINT!",
-		"",
-		""
-	);
+    "   CORRECT POINT!",
+    "",
+    ""
+  );
 
   // rätt_punkt++;
   game_begin_next_level();
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 int hold_current_repetition = 0;
 int hold_repetitions_ok = 0;
@@ -804,18 +662,7 @@ void hold_draw() {
       backlight_force((millis() % 250) < 100);
       lcd.setCursor(0, 3);
       //         01234012340123401234
-  
       lcd.print("  TAG!  TAG!  TAG!  ");
-     /* int scroll = (hold_frame >> 1) % 20;
-      switch (scroll) {
-        case 0: lcd.print("TAG!  TAG!  TAG!  TA"); break;
-        case 1: lcd.print("AG!  TAG!  TAG!  TAG"); break;
-        case 2: lcd.print("G!  TAG!  TAG!  TAG!"); break;
-        case 3: lcd.print("!  TAG!  TAG!  TAG! "); break;
-        case 4: lcd.print("  TAG!  TAG!  TAG!  "); break;
-        case 5: lcd.print(" TAG!  TAG!  TAG!  T"); break;
-      }
-      */
     } else {
       backlight_force();
       lcd.setCursor(0, 3);
@@ -890,10 +737,6 @@ void hold_scan(char *tag, char *alias) {
 
 }
 
-
-
-
-
 int respawn_timer = 0;
 long respawn_start = 0;
 
@@ -926,7 +769,6 @@ if (respawn_frame % 40 == 0)
   //
 }
 
-
 void respawn_loop() {
   respawn_timer = RESPAWN_TIME - (seconds() - respawn_start);
 
@@ -941,24 +783,10 @@ void respawn_scan(char *tag, char *alias) {
   if (strcmp(alias, "RESET") == 0) { box_reset(); }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 void end_begin() {
   currentloop = LOOP_END;
   end_draw();
 }
-
 
 void end_draw() {
   backlight_force();
@@ -995,25 +823,6 @@ void end_scan(char *tag, char *alias) {
   }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #include "tags.h"
 #include "zones.h"
-
-
-
-
 
