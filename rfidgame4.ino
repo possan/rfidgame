@@ -417,28 +417,7 @@ void game_begin_current_level() {
   // current_point = (Zone *)&zones[current_point_index];
   // _pgm_get_zone(current_point_index, &current_point);
 
-
-  int r1 = rand() % 100;  
- 
-  lcd.clear();
-  lcd.setCursor(0,0);
-  lcd.print("Lvl: ");
-  lcd.setCursor(13,0);
-  lcd.print(current_level_index);
-  lcd.setCursor(0,1);
-  lcd.print("Hahachans:");
-  lcd.setCursor(13,1);
-  lcd.print(current_level.hahachance);
-  lcd.setCursor(5,2);
-  lcd.print(current_level.holdchance);
-  lcd.setCursor(10,2);
-  lcd.print(current_level.index);
-  lcd.setCursor(0,2);
-  lcd.print("Slump:");
-  lcd.setCursor(13,2);
-  lcd.print(r1, DEC);
-  delay(5000);
-    
+  int r1 = rand() % 100;
   if (r1 < current_level.hahachance) {
     //  < 100
     // välja två andra platser
